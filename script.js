@@ -20,6 +20,12 @@ const OPERATORS = {
     },
 }
 
+let operatorsReverseMap = Object.keys(OPERATORS)
+    .reduce((current, nextOp) => {
+        current[OPERATORS[nextOp].display] = nextOp;
+        return current;
+    }, {})
+
 const CLEAR_SYMS = {
     "all_clear": {
         "display": "AC",
@@ -31,8 +37,7 @@ const CLEAR_SYMS = {
 
 const SPECIAL_SYMS = {
     "dot": {
-        "display": "·",
-        "internal": ".",
+        "display": ".",
     },
     "equality": {
         "display": "=",
@@ -88,7 +93,49 @@ function createNewCalcButton(symbol, size) {
     newButton.innerText = getSymbolDisplay(symbol);
     newButton.style.cssText = `height: ${size}px; width: ${size}px;`;
     newButton.classList.add(getSymbolClass(symbol));
+    newButton.addEventListener("click", () => buttonPressHandle(symbol));
     return newButton;
+}
+
+function buttonPressHandle(symbol) {
+    const calcOperand1 = document.getElementById("operand1");
+    const calcOperator = document.getElementById("operator");
+    const calcOperand2 = document.getElementById("operand2");
+    const calcPrettyOut = document.getElementById("pretty");
+    const symbolClass = getSymbolClass(symbol);
+    if (symbolClass === "number") {
+        if (calcOperator.innerText === '') {
+            calcOperand1.innerText += getSymbolDisplay(symbol);
+        } else {
+            calcOperand2.innerText += getSymbolDisplay(symbol);
+        }
+    } else if (symbolClass === "operator") {
+        calcOperator.innerText = getSymbolDisplay(symbol);
+    } else if (symbolClass === "equality") {
+        let x = parseFloat(calcOperand1.innerText);
+        let y = parseFloat(calcOperand2.innerText);
+        let operator = operatorsReverseMap[calcOperator.innerText];
+        performOperation(x, y, operator, calcPrettyOut);
+    }
+}
+
+function performOperation(x, y, operation, display) {
+    let result;
+    switch (operation) {
+        case "addition":
+            result = x + y;
+            break;
+        case "subtraction":
+            result = x - y;
+            break;
+        case "multiplication":
+            result = x * y;
+            break;
+        case "division":
+            result = x / y;
+            break;
+    }
+    display.innerText = result.toFixed(2);
 }
 
 emplaceButtons(calcInputPanel);
