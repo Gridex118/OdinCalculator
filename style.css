@@ -46,7 +46,16 @@ main {
      -3px -2px 5px black inset;
     width: 380px;
     height: 100px;
+    padding: 10px 20px 10px 0;
     background-color: #3b3b3b;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+#pretty {
+    font-size: 32pt;
 }
 
 #calc-input {
