@@ -1,3 +1,6 @@
+const calcInputPanel = document.getElementById("calc-input");
+
+
 const OPERATORS = {
     "addition": {
         "display": "+",
@@ -55,3 +58,37 @@ function getSymbolDisplay(symbol) {
     // We leverage this to just return the symbol for numbers, as required
     return allSymbols[symbol]? allSymbols[symbol].display : symbol;
 }
+
+
+function emplaceButtons(canvas) {
+    const layout = [
+        ["all_clear", "clear", "division"],
+        [7, 8, 9, "addition"],
+        [4, 5, 6, "subtraction"],
+        [1, 2, 3, "multiplication"],
+        [0, "dot", "equality"]
+    ];
+    const width = 0.8 * canvas.clientWidth / 4;
+    const height = 0.8 * canvas.clientHeight / layout.length;
+    layout.forEach(row => emplaceButtonsSingleRow(canvas, row, width, height));
+}
+
+function emplaceButtonsSingleRow(canvas, row, width, height) {
+    const newRow = document.createElement("div");
+    newRow.classList.add("calc-input-row");
+    canvas.appendChild(newRow);
+    let size = (width > height)? height : width;
+    row.forEach(symbol => {
+        newRow.appendChild(createNewCalcButton(symbol, size));
+    })
+}
+
+function createNewCalcButton(symbol, size) {
+    const newButton = document.createElement("button");
+    newButton.innerText = getSymbolDisplay(symbol);
+    newButton.style.cssText = `height: ${size}px; width: ${size}px;`;
+    newButton.classList.add(getSymbolClass(symbol));
+    return newButton;
+}
+
+emplaceButtons(calcInputPanel);
