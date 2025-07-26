@@ -111,12 +111,27 @@ function buttonPressHandle(symbol) {
         }
     } else if (symbolClass === "operator") {
         calcOperator.innerText = getSymbolDisplay(symbol);
+    } else if (symbolClass === "clear") {
+        if (symbol === "all_clear") {
+            [calcOperand1, calcOperand2, calcOperator, calcPrettyOut]
+                .forEach((element) => element.innerText = '');
+        } else {
+            popFromExpression(calcOperand1, calcOperator, calcOperand2);
+        }
     } else if (symbolClass === "solve") {
         let x = parseFloat(calcOperand1.innerText);
         let y = parseFloat(calcOperand2.innerText);
         let operator = operatorsReverseMap[calcOperator.innerText];
         performOperation(x, y, operator, calcPrettyOut);
     }
+}
+
+function popFromExpression(xElement, opElement, yElement) {
+    // The expression elements appear in this order; we assume that the
+    // right most non empty element is where the cursor's at
+    let toPop = [xElement, opElement, yElement]
+        .findLast(element => element.innerText !== '');
+    toPop.innerText = toPop.innerText.slice(0, -1);
 }
 
 function performOperation(x, y, operation, display) {
