@@ -6,6 +6,7 @@
 
 body {
     background-color: #80FFEC;
+    font-family: "JetBrains Mono";
     color: #0D9682;
     min-height: 100vh;
     display: flex;
