@@ -135,6 +135,14 @@ function handleSolve(xElement, opElement, yElement, prettyElement) {
     let y = parseFloat(yElement.innerText);
     let operator = operatorsReverseMap[opElement.innerText];
     performOperation(x, y, operator, prettyElement);
+    moveToOldExpression(xElement, opElement, yElement);
+}
+
+function moveToOldExpression(xElement, opElement, yElement) {
+    const oldElement = document.getElementById("old-expression");
+    oldElement.innerText = `${xElement.innerText} ${opElement.innerText} ${yElement.innerText}<`;
+    [xElement, opElement, yElement]
+        .forEach(element => element.innerText = '');
 }
 
 function popFromExpression(xElement, opElement, yElement) {

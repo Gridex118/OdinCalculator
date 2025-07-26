@@ -54,6 +54,11 @@ main {
     justify-content: flex-end;
 }
 
+#old-expression {
+    display: inline-block;
+    margin-right: 24px;
+}
+
 #pretty {
     font-size: 32pt;
 }
