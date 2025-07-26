@@ -102,13 +102,14 @@ function buttonPressHandle(symbol) {
     const calcOperator = document.getElementById("operator");
     const calcOperand2 = document.getElementById("operand2");
     const calcPrettyOut = document.getElementById("pretty");
+    const calcOldExpression = document.getElementById("old-expression");
     const symbolClass = getSymbolClass(symbol);
     if (symbolClass === "number") {
         handleNumberInput(symbol, calcOperand1, calcOperator, calcOperand2);
     } else if (symbolClass === "operator") {
         calcOperator.innerText = getSymbolDisplay(symbol);
     } else if (symbolClass === "clear") {
-        handleClear(symbol, calcOperand1, calcOperator, calcOperand2, calcPrettyOut);
+        handleClear(symbol, calcOperand1, calcOperator, calcOperand2, calcPrettyOut, calcOldExpression);
     } else if (symbolClass === "solve") {
         handleSolve(calcOperand1, calcOperator, calcOperand2, calcPrettyOut);
     }
@@ -121,9 +122,9 @@ function handleNumberInput(symbol, xElement, opElement, yElement) {
         cursorElement.innerText += getSymbolDisplay(symbol);
 }
 
-function handleClear(symbol, xElement, opElement, yElement, prettyElement) {
+function handleClear(symbol, xElement, opElement, yElement, prettyElement, oldElement) {
     if (symbol === "all_clear") {
-        [xElement, opElement, yElement, prettyElement]
+        [xElement, opElement, yElement, prettyElement, oldElement]
             .forEach((element) => element.innerText = '');
     } else {
         popFromExpression(xElement, opElement, yElement);
@@ -134,8 +135,10 @@ function handleSolve(xElement, opElement, yElement, prettyElement) {
     let x = parseFloat(xElement.innerText);
     let y = parseFloat(yElement.innerText);
     let operator = operatorsReverseMap[opElement.innerText];
-    performOperation(x, y, operator, prettyElement);
-    moveToOldExpression(xElement, opElement, yElement);
+    if (!isNaN(x) && !isNaN(y)) {
+        performOperation(x, y, operator, prettyElement);
+        moveToOldExpression(xElement, opElement, yElement);
+    }
 }
 
 function moveToOldExpression(xElement, opElement, yElement) {
@@ -169,8 +172,7 @@ function performOperation(x, y, operation, display) {
             result = x / y;
             break;
     }
-    if (!isNaN(x) && !isNaN(y))
-        display.innerText = result.toFixed(2);
+    display.innerText = result.toFixed(2);
 }
 
 emplaceButtons(calcInputPanel);
