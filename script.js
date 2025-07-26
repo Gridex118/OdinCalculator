@@ -2,46 +2,26 @@ const calcInputPanel = document.getElementById("calc-input");
 
 
 const OPERATORS = {
-    "addition": {
-        "display": "+",
-        "internal": "+",
-    },
-    "subtraction": {
-        "display": "-",
-        "internal": "-",
-    },
-    "multiplication": {
-        "display": "✕",
-        "internal": "*",
-    },
-    "division": {
-        "display": "÷",
-        "internal": "/",
-    },
+    "addition": "+",
+    "subtraction": "-",
+    "multiplication": "✕",
+    "division": "÷",
 }
 
 let operatorsReverseMap = Object.keys(OPERATORS)
     .reduce((current, nextOp) => {
-        current[OPERATORS[nextOp].display] = nextOp;
+        current[OPERATORS[nextOp]] = nextOp;
         return current;
     }, {})
 
 const CLEAR_SYMS = {
-    "all_clear": {
-        "display": "AC",
-    },
-    "clear": {
-        "display": "C",
-    },
+    "all_clear": "AC",
+    "clear": "C",
 }
 
 const SPECIAL_SYMS = {
-    "dot": {
-        "display": ".",
-    },
-    "solve": {
-        "display": "=",
-    },
+    "dot": ".",
+    "solve": "=",
 }
 
 function getSymbolClass(symbol) {
@@ -61,7 +41,7 @@ function getSymbolDisplay(symbol) {
     const allSymbols = Object.assign({}, OPERATORS, CLEAR_SYMS, SPECIAL_SYMS);
     // Numbers do not appear in allSymbols
     // We leverage this to just return the symbol for numbers, as required
-    return allSymbols[symbol]? allSymbols[symbol].display : symbol;
+    return allSymbols[symbol]? allSymbols[symbol] : symbol;
 }
 
 
