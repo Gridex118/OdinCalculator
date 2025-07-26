@@ -107,11 +107,17 @@ function buttonPressHandle(symbol) {
     if (symbolClass === "number") {
         handleNumberInput(symbol, calcOperand1, calcOperator, calcOperand2);
     } else if (symbolClass === "operator") {
-        calcOperator.innerText = getSymbolDisplay(symbol);
+        handleOperatorInput(symbol, calcOperand1, calcOperator, calcOperand2);
     } else if (symbolClass === "clear") {
         handleClear(symbol, calcOperand1, calcOperator, calcOperand2, calcPrettyOut, calcOldExpression);
     } else if (symbolClass === "solve") {
         handleSolve(calcOperand1, calcOperator, calcOperand2, calcPrettyOut);
+    }
+}
+
+function handleOperatorInput(symbol, xElement, opElement, yElement) {
+    if (xElement.innerText !== '') {
+        opElement.innerText = getSymbolDisplay(symbol);
     }
 }
 
