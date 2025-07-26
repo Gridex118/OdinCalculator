@@ -1,6 +1,3 @@
-const calcInputPanel = document.getElementById("calc-input");
-
-
 const OPERATORS = {
     "addition": "+",
     "subtraction": "-",
@@ -45,7 +42,8 @@ function getSymbolDisplay(symbol) {
 }
 
 
-function emplaceButtons(canvas) {
+function emplaceButtons() {
+    const calcInputPanel = document.getElementById("calc-input");
     const layout = [
         ["all_clear", "clear", "division"],
         [7, 8, 9, "addition"],
@@ -53,9 +51,9 @@ function emplaceButtons(canvas) {
         [1, 2, 3, "multiplication"],
         [0, "dot", "solve"]
     ];
-    const width = 0.8 * canvas.clientWidth / 4;
-    const height = 0.8 * canvas.clientHeight / layout.length;
-    layout.forEach(row => emplaceButtonsSingleRow(canvas, row, width, height));
+    const width = 0.8 * calcInputPanel.clientWidth / 4;
+    const height = 0.8 * calcInputPanel.clientHeight / layout.length;
+    layout.forEach(row => emplaceButtonsSingleRow(calcInputPanel, row, width, height));
 }
 
 function emplaceButtonsSingleRow(canvas, row, width, height) {
@@ -69,29 +67,29 @@ function emplaceButtonsSingleRow(canvas, row, width, height) {
 }
 
 function createNewCalcButton(symbol, size) {
+    const symbolClass = getSymbolClass(symbol);
     const newButton = document.createElement("button");
     newButton.innerText = getSymbolDisplay(symbol);
     newButton.style.cssText = `height: ${size}px; width: ${size}px;`;
-    newButton.classList.add(getSymbolClass(symbol));
-    newButton.addEventListener("click", () => buttonPressHandle(symbol));
+    newButton.classList.add(symbolClass);
+    setButtonClickHandler(newButton, symbol, symbolClass);
     return newButton;
 }
 
-function buttonPressHandle(symbol) {
+function setButtonClickHandler(button, symbol, symbolClass) {
     const calcOperand1 = document.getElementById("operand1");
     const calcOperator = document.getElementById("operator");
     const calcOperand2 = document.getElementById("operand2");
     const calcPrettyOut = document.getElementById("pretty");
     const calcOldExpression = document.getElementById("old-expression");
-    const symbolClass = getSymbolClass(symbol);
     if (symbolClass === "number") {
-        handleNumberInput(symbol, calcOperand1, calcOperator, calcOperand2);
+        button.addEventListener("click", () => handleNumberInput(symbol, calcOperand1, calcOperator, calcOperand2));
     } else if (symbolClass === "operator") {
-        handleOperatorInput(symbol, calcOperand1, calcOperator, calcOperand2, calcPrettyOut);
+        button.addEventListener("click", () => handleOperatorInput(symbol, calcOperand1, calcOperator, calcOperand2, calcPrettyOut));
     } else if (symbolClass === "clear") {
-        handleClear(symbol, calcOperand1, calcOperator, calcOperand2, calcPrettyOut, calcOldExpression);
+        button.addEventListener("click", () => handleClear(symbol, calcOperand1, calcOperator, calcOperand2, calcPrettyOut, calcOldExpression));
     } else if (symbolClass === "solve") {
-        handleSolve(calcOperand1, calcOperator, calcOperand2, calcPrettyOut);
+        button.addEventListener("click", () => handleSolve(calcOperand1, calcOperator, calcOperand2, calcPrettyOut));
     }
 }
 
@@ -170,4 +168,4 @@ function performOperation(x, y, operation, display) {
     display.innerText = result.toFixed(2);
 }
 
-emplaceButtons(calcInputPanel);
+emplaceButtons();
