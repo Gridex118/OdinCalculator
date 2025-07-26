@@ -104,11 +104,10 @@ function buttonPressHandle(symbol) {
     const calcPrettyOut = document.getElementById("pretty");
     const symbolClass = getSymbolClass(symbol);
     if (symbolClass === "number") {
-        if (calcOperator.innerText === '') {
-            calcOperand1.innerText += getSymbolDisplay(symbol);
-        } else {
-            calcOperand2.innerText += getSymbolDisplay(symbol);
-        }
+        let cursorElement = (calcOperator.innerText === '')? calcOperand1 : calcOperand2;
+        let isIllegalDotInput = symbol === "dot" && cursorElement.innerText.includes('.');
+        if (!isIllegalDotInput)
+            cursorElement.innerText += getSymbolDisplay(symbol);
     } else if (symbolClass === "operator") {
         calcOperator.innerText = getSymbolDisplay(symbol);
     } else if (symbolClass === "clear") {
