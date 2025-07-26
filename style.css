@@ -89,7 +89,7 @@ main {
 }
 
 #calc-input button.clear,
-#calc-input button.equality {
+#calc-input button.solve {
     border-radius: 30% / 50%;
     flex-grow: 1;
 }
@@ -98,9 +98,12 @@ main {
     background-color: lightcoral;
 }
 
-#calc-input button.equality:hover,
 #calc-input button.operator:hover {
     background-color: mediumturquoise;
+}
+
+#calc-input button.solve:hover {
+    background-color: lawngreen;
 }
 
 footer {

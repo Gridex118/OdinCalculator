@@ -39,7 +39,7 @@ const SPECIAL_SYMS = {
     "dot": {
         "display": ".",
     },
-    "equality": {
+    "solve": {
         "display": "=",
     },
 }
@@ -49,8 +49,8 @@ function getSymbolClass(symbol) {
         return "operator";
     } else if (symbol in CLEAR_SYMS) {
         return "clear";
-    } else if (symbol === "equality") {
-        return "equality";
+    } else if (symbol === "solve") {
+        return "solve";
     } else {
         // We format the decimal dot as a number
         return "number";
@@ -71,7 +71,7 @@ function emplaceButtons(canvas) {
         [7, 8, 9, "addition"],
         [4, 5, 6, "subtraction"],
         [1, 2, 3, "multiplication"],
-        [0, "dot", "equality"]
+        [0, "dot", "solve"]
     ];
     const width = 0.8 * canvas.clientWidth / 4;
     const height = 0.8 * canvas.clientHeight / layout.length;
@@ -111,7 +111,7 @@ function buttonPressHandle(symbol) {
         }
     } else if (symbolClass === "operator") {
         calcOperator.innerText = getSymbolDisplay(symbol);
-    } else if (symbolClass === "equality") {
+    } else if (symbolClass === "solve") {
         let x = parseFloat(calcOperand1.innerText);
         let y = parseFloat(calcOperand2.innerText);
         let operator = operatorsReverseMap[calcOperator.innerText];
