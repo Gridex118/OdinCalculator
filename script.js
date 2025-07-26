@@ -107,7 +107,7 @@ function buttonPressHandle(symbol) {
     if (symbolClass === "number") {
         handleNumberInput(symbol, calcOperand1, calcOperator, calcOperand2);
     } else if (symbolClass === "operator") {
-        handleOperatorInput(symbol, calcOperand1, calcOperator, calcOperand2);
+        handleOperatorInput(symbol, calcOperand1, calcOperator, calcOperand2, calcPrettyOut);
     } else if (symbolClass === "clear") {
         handleClear(symbol, calcOperand1, calcOperator, calcOperand2, calcPrettyOut, calcOldExpression);
     } else if (symbolClass === "solve") {
@@ -115,7 +115,16 @@ function buttonPressHandle(symbol) {
     }
 }
 
-function handleOperatorInput(symbol, xElement, opElement, yElement) {
+function handleOperatorInput(symbol, xElement, opElement, yElement, prettyElement) {
+    // If the second operand has been inserted, use the result of the old
+    // expression as the new first operand by telling handleSolve to store
+    // output in the xElement instead of the prettyElement
+    if (yElement.innerText !== '')
+        handleSolve(xElement, opElement, yElement, xElement);
+    if (xElement.innerText === '' && prettyElement.innerText !== '') {
+        xElement.innerText = prettyElement.innerText;
+    }
+    // The above does not guarantee that xElement received a value
     if (xElement.innerText !== '') {
         opElement.innerText = getSymbolDisplay(symbol);
     }
@@ -142,8 +151,8 @@ function handleSolve(xElement, opElement, yElement, prettyElement) {
     let y = parseFloat(yElement.innerText);
     let operator = operatorsReverseMap[opElement.innerText];
     if (!isNaN(x) && !isNaN(y)) {
-        performOperation(x, y, operator, prettyElement);
         moveToOldExpression(xElement, opElement, yElement);
+        performOperation(x, y, operator, prettyElement);
     }
 }
 
