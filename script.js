@@ -104,25 +104,37 @@ function buttonPressHandle(symbol) {
     const calcPrettyOut = document.getElementById("pretty");
     const symbolClass = getSymbolClass(symbol);
     if (symbolClass === "number") {
-        let cursorElement = (calcOperator.innerText === '')? calcOperand1 : calcOperand2;
-        let isIllegalDotInput = symbol === "dot" && cursorElement.innerText.includes('.');
-        if (!isIllegalDotInput)
-            cursorElement.innerText += getSymbolDisplay(symbol);
+        handleNumberInput(symbol, calcOperand1, calcOperator, calcOperand2);
     } else if (symbolClass === "operator") {
         calcOperator.innerText = getSymbolDisplay(symbol);
     } else if (symbolClass === "clear") {
-        if (symbol === "all_clear") {
-            [calcOperand1, calcOperand2, calcOperator, calcPrettyOut]
-                .forEach((element) => element.innerText = '');
-        } else {
-            popFromExpression(calcOperand1, calcOperator, calcOperand2);
-        }
+        handleClear(symbol, calcOperand1, calcOperator, calcOperand2, calcPrettyOut);
     } else if (symbolClass === "solve") {
-        let x = parseFloat(calcOperand1.innerText);
-        let y = parseFloat(calcOperand2.innerText);
-        let operator = operatorsReverseMap[calcOperator.innerText];
-        performOperation(x, y, operator, calcPrettyOut);
+        handleSolve(calcOperand1, calcOperator, calcOperand2, calcPrettyOut);
     }
+}
+
+function handleNumberInput(symbol, xElement, opElement, yElement) {
+    let cursorElement = (opElement.innerText === '')? xElement : yElement;
+    let isIllegalDotInput = symbol === "dot" && cursorElement.innerText.includes('.');
+    if (!isIllegalDotInput)
+        cursorElement.innerText += getSymbolDisplay(symbol);
+}
+
+function handleClear(symbol, xElement, opElement, yElement, prettyElement) {
+    if (symbol === "all_clear") {
+        [xElement, opElement, yElement, prettyElement]
+            .forEach((element) => element.innerText = '');
+    } else {
+        popFromExpression(xElement, opElement, yElement);
+    }
+}
+
+function handleSolve(xElement, opElement, yElement, prettyElement) {
+    let x = parseFloat(xElement.innerText);
+    let y = parseFloat(yElement.innerText);
+    let operator = operatorsReverseMap[opElement.innerText];
+    performOperation(x, y, operator, prettyElement);
 }
 
 function popFromExpression(xElement, opElement, yElement) {
@@ -149,7 +161,8 @@ function performOperation(x, y, operation, display) {
             result = x / y;
             break;
     }
-    display.innerText = result.toFixed(2);
+    if (!isNaN(x) && !isNaN(y))
+        display.innerText = result.toFixed(2);
 }
 
 emplaceButtons(calcInputPanel);
